@@ -1,0 +1,18 @@
+*.o
+*.out
+*.exe
+*.lck
+.~*
+
+__pycache__/
+*.py[cod]
+*.pyc
+.venv
+venv
+.pve
+pve
+
+.DS_Store
+
+# katalog konfiguracyjny WebStorma
+.idea
