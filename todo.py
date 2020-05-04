@@ -34,8 +34,6 @@ def index():
     return render_template('index.html')
 
 
-
-
 @app.route('/zadania')
 def zadania():
     db = get_db()
