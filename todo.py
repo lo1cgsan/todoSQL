@@ -49,15 +49,15 @@ def zadania():
             db.execute('INSERT INTO zadania VALUES (?, ?, ?, ?);',
                        [None, zadanie, zrobione, data_pub])
             db.commit()
-            flash('Dodano nowe zadanie.')
+            flash('Dodano nowe zadanie.', 'text-success')
             return redirect(url_for('zadania'))
 
-        error = 'Nie możesz dodać pustego zadania!'  # komunikat o błędzie
+        flash('Nie możesz dodać pustego zadania!', 'text-danger')
 
     db = get_db()
     kursor = db.execute('SELECT * FROM zadania ORDER BY data_pub DESC;')
     zadania = kursor.fetchall()
-    return render_template('zadania_lista.html', zadania=zadania, error=error)
+    return render_template('zadania_lista.html', zadania=zadania)
 
 
 if __name__ == '__main__':
