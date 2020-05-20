@@ -60,5 +60,23 @@ def zadania():
     return render_template('zadania_lista.html', zadania=zadania)
 
 
+@app.route('/zrobione', methods=['POST'])
+def zrobione():
+    """Zmiana statusu zadania na wykonane."""
+    zadanie_id = request.form['id']
+    db = get_db()
+    db.execute('UPDATE zadania SET zrobione=1 WHERE id=?', [zadanie_id])
+    db.commit()
+    flash('Zmieniono status zadania.')
+    return redirect(url_for('zadania'))
+
+
+@app.route('/usun', methods=['POST'])
+def usun():
+    pass
+    flash('Usunięto zadanie!', 'text-danger')
+    return redirect(url_for('zadania'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

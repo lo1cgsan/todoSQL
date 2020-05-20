@@ -1,2 +1,5 @@
 /* todo/static/style.css */
+.done {
+	text-decoration: line-through;
+}
 
