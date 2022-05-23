@@ -8,51 +8,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block tytul %}{% endblock %} &#8211; {{ config.TYTUL }}</title>
   <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
+<header class="p-3 bg-dark text-white">
   <div class="container">
-    <!-- Static navbar -->
-    <nav class="navbar navbar-expand-sm bg-light">
-      <a class="navbar-brand" href=".">ToDo</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a href="" class="nav-link">Lista zadań</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div class="row">
-      <div class="col">
-        <h1>{% block h1 %}{% endblock %}</h1>
-        {% with komunikaty = get_flashed_messages(with_categories=true) %}
-        {% if komunikaty %}
-        <div id="komunikaty" class="well">
-          {% for kategoria, komunikat in komunikaty %}
-          <span class="{{ kategoria }}">{{ komunikat }}</span><br>
-          {% endfor %}
-        </div>
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">ToDo</a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+          <a href="{{ url_for('zadania') }}" class="nav-link px-2 text-white">Lista zadań</a>
+        </li>
+      </ul>
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+      </form>
+
+      <div class="text-end">
+        {% if session['id'] %}
+          <a href="{{ url_for('wyloguj') }}" class="btn btn-outline-light me-2">Wyloguj się</a>
+        {% else %}
+          <a href="{{ url_for('loguj') }}" class="btn btn-outline-light me-2">Zaloguj się</a>
+          <a href="{{ url_for('loguj') }}" class="btn btn-warning">Utwórz konto</a>
         {% endif %}
-        {% endwith %}
-        <div id="tresc" class="cb">
-          {% block tresc %}
-          {% endblock %}
-        </div>
       </div>
-    </div> <!-- /row -->
-  </div> <!-- /container -->
-  <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <!-- Popper JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <!-- Latest compiled JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    </div>
+  </div>
+</header>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container py-5">
+    <h1 class="display-5 fw-bold">{% block h1 %}{% endblock %}</h1>
+    <p class="col-md-8 fs-4">Twoja lista zadań.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      {% with komunikaty = get_flashed_messages(with_categories=true) %}
+      {% if komunikaty %}
+      <div id="komunikaty" class="well">
+        {% for kategoria, komunikat in komunikaty %}
+        <span class="{{ kategoria }}">{{ komunikat }}</span><br>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      <div id="tresc" class="cb">
+        {% block tresc %}
+        {% endblock %}
+      </div>
+    </div>
+  </div> <!-- /row -->
+</div> <!-- /container -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

@@ -1,0 +1,14 @@
+<!-- todo/templates/loguj.html -->
+{% extends "szkielet.html" %}
+{% block tytul %}{{ config.SITE_NAME }}{% endblock%}
+
+{% block h1 %}Logowanie{% endblock %}
+
+{% block tresc %}
+    <!-- formularz dodawania zadania -->
+    <form class="add-form" method="POST" action="{{ url_for('loguj') }}">
+      <label for="email" class="p-2">Podaj adres email</label>
+      <input type="email" id="email" name="email" value="" class="form-control p-2" required />
+      <button type="submit" class="btn btn-primary m-2">Zaloguj</button>
+    </form>
+{% endblock %}

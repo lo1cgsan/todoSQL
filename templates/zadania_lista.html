@@ -5,6 +5,8 @@
 {% block h1 %}Moje zadania{% endblock %}
 
 {% block tresc %}
+    {% if session['email'] %}
+    <p><strong class="success">Witaj: {{ session['email'] }}</strong></p>
     <!-- formularz dodawania zadania -->
     <form class="add-form" method="POST" action="{{ url_for('zadania') }}">
       <div class="form-group form-inline">
@@ -13,6 +15,7 @@
         <button type="submit" class="btn btn-primary m-2">Dodaj zadanie</button>
       </div>
     </form>
+    {% endif %}
 
     <ol class="list-group">
       <!-- wypisujemy kolejno wszystkie zdania -->
@@ -32,6 +35,13 @@
               <!-- wysyłamy jedynie informacje o id zadania -->
               <input type="hidden" name="id" value="{{ zadanie.id }}">
               <button type="submit" class="btn btn-primary">Wykonane</button>
+            </form>
+          {% else %}
+          <!-- formularz zmiany statusu zadania -->
+            <form method="POST" action="{{ url_for('niezrobione') }}">
+              <!-- wysyłamy jedynie informacje o id zadania -->
+              <input type="hidden" name="id" value="{{ zadanie.id }}"/>
+              <button type="submit">Niewykonane</button>
             </form>
           {% endif %}
             <form method="POST" action="{{ url_for('zrobione') }}" class="p-2">

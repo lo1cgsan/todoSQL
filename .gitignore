@@ -14,5 +14,6 @@ pve
 
 .DS_Store
 
-# katalog konfiguracyjny WebStorma
+# katalogi konfiguracyjne
+.vscode
 .idea
