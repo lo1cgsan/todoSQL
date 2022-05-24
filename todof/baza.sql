@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS users;  -- usunięcie tabeli
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UINQUE NOT NULL,
+    haslo TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS zadania;  -- usunięcie tabeli
+CREATE TABLE zadania (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_user INTEGER NOT NULL,
+    zadanie TEXT NOT NULL,
+    zrobione BOOLEANNOT NULL DEFAULT 0,
+    data_pub TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_user) REFERENCES users(id)
+);

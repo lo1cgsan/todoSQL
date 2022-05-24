@@ -2,18 +2,23 @@ from flask import Flask, g
 from flask import render_template
 import os
 import sqlite3
+import click
+from flask import current_app
+from flask.cli import with_appcontext
 from datetime import datetime
 from flask import flash, redirect, url_for, request
 from flask import session
+from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
+
 
 app = Flask(__name__)
 
-app.config.update(dict(
-    SECRET_KEY='bardzosekretnawartosc',
+app.config.from_mapping(
+    SECRET_KEY='dev',
     DATABASE=os.path.join(app.root_path, 'zadania.db'),
     SITE_NAME='Moje zadania'
-))
-
+)
 
 def get_db():
     """Funkcja tworząca połączenie z bazą danych"""
@@ -35,11 +40,23 @@ def close_db(error):
 def init_db():
     """Czyszczenie bazy i utworzenie jej na nowo."""
     db = get_db()
-    pass
 
+    with current_app.open_resource('baza.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+
+# @click.command('init-db')
+# @with_appcontext
+# def init_db_command():
+#     """Usunięcie danych i utworzenie nowych tabel."""
+#     init_db()
+#     click.echo('Inicjacja bazy danych.')
+
+# app.cli.add_command(init_db_command)
 
 @app.route('/')
 def index():
+    print(session)
     return render_template('index.html')
 
 
@@ -52,20 +69,21 @@ def zadania():
             zrobione = '0'
             data_pub = datetime.now()
             db = get_db()
-            db.execute('INSERT INTO zadania VALUES (?, ?, ?, ?);',
-                       [None, zadanie, zrobione, data_pub])
+            db.execute('INSERT INTO zadania VALUES (?, ?, ?, ?, ?);',
+                       [None, session["user_id"], zadanie, zrobione, data_pub])
             db.commit()
             flash('Dodano nowe zadanie.')
             return redirect(url_for('zadania'))
 
         error = 'Nie możesz dodać pustego zadania!'  # komunikat o błędzie
-    if 'id' in session:
+    if "user_id" in session:
         db = get_db()
         kursor = db.execute('SELECT * FROM zadania ORDER BY data_pub DESC;')
         zadania = kursor.fetchall()
         return render_template('zadania_lista.html', zadania=zadania, error=error)
-    flash('Dodawanie zadań wymaga logowania.')
-    return redirect(url_for('loguj'))
+    else:
+        flash('Dodawanie zadań wymaga logowania.')
+        return redirect(url_for('loguj'))
 
 
 @app.route('/zrobione', methods=['POST'])
@@ -94,30 +112,39 @@ def niezrobione():
 def loguj():
     if request.method == 'POST':
         # przesłanie formularza
-        email = request.form['email']
+        email = request.form['email'].strip()
+        haslo = request.form['haslo'].strip()
+
         db = get_db()
-        kursor = db.execute('SELECT * FROM users WHERE email=?', [email])
-        id_user = kursor.fetchone()
-        if id_user is None:
+        error = None
+
+        user = db.execute('SELECT * FROM users WHERE email = ?', [email]).fetchone()
+
+        if user is None:
             # tworzenie konta
-            db.execute('INSERT INTO users VALUES (?, ?)', [None, email])
+            db.execute('INSERT INTO users VALUES (?, ?, ?)', [None, email, generate_password_hash(haslo)])
             db.commit()
             flash(f'Utworzono konto {email}')
-            id_user = kursor.lastrowid
-        else:
-            id_user = id_user[0]
-        session['id'] = id_user
-        session['email'] = email
-        return redirect(url_for('zadania'))
+            user = user.lastrowid
+        elif not check_password_hash(user["haslo"], haslo):
+            error = "Błędne hasło."
+
+        if error is None:
+            session.clear()
+            session["user_id"] = user["id"]
+            session["email"] = user["email"]
+            return redirect(url_for('zadania'))
+
     return render_template('loguj.html')
 
 
 @app.route('/wyloguj')
 def wyloguj():
     flash(f"Wylogowano użytkownika {session['email']}.")
-    session.pop('id', default=None)
-    session.pop('email', default=None)
+    session.clear()
     return redirect(url_for('index'))
 
-
-app.run(debug=True)
+with app.app_context():
+    if not os.path.exists(current_app.config['DATABASE']):
+        init_db()
+    app.run(debug=True)

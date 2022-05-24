@@ -28,7 +28,7 @@
       </form>
 
       <div class="text-end">
-        {% if session['id'] %}
+        {% if session["user_id"] %}
           <a href="{{ url_for('wyloguj') }}" class="btn btn-outline-light me-2">Wyloguj się</a>
         {% else %}
           <a href="{{ url_for('loguj') }}" class="btn btn-outline-light me-2">Zaloguj się</a>
