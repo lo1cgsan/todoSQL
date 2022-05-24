@@ -12,7 +12,16 @@ venv
 .pve
 pve
 
+instance/
+
 .DS_Store
+
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
 
 # katalogi konfiguracyjne
 .vscode
