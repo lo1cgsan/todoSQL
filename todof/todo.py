@@ -108,6 +108,31 @@ def niezrobione():
     return redirect(url_for('zadania'))
 
 
+@app.route('/rejestruj', methods=['GET', 'POST'])
+def loguj():
+    if request.method == 'POST':
+        email = request.form['email'].strip()
+        haslo = request.form['haslo'].strip()
+
+        db = get_db()
+        error = None
+
+        try:
+            # tworzenie konta
+            db.execute(
+                'INSERT INTO users VALUES (?, ?, ?)',
+                [None, email, generate_password_hash(haslo)]
+            )
+            db.commit()
+        except db.IntegrityError:
+            error = f"Użytkownik {email} jest już zarejestrowany."
+        else:
+            flash(f'Utworzono konto {email}')
+            return redirect(url_for('loguj'))
+    flash(error)
+    return render_template('rejestruj.html')
+
+
 @app.route('/loguj', methods=['GET', 'POST'])
 def loguj():
     if request.method == 'POST':
@@ -122,10 +147,7 @@ def loguj():
 
         if user is None:
             # tworzenie konta
-            db.execute('INSERT INTO users VALUES (?, ?, ?)', [None, email, generate_password_hash(haslo)])
-            db.commit()
-            flash(f'Utworzono konto {email}')
-            user = user.lastrowid
+            error = "Błędny email."
         elif not check_password_hash(user["haslo"], haslo):
             error = "Błędne hasło."
 
@@ -134,7 +156,7 @@ def loguj():
             session["user_id"] = user["id"]
             session["email"] = user["email"]
             return redirect(url_for('zadania'))
-
+    flash(error)
     return render_template('loguj.html')
 
 
@@ -143,6 +165,7 @@ def wyloguj():
     flash(f"Wylogowano użytkownika {session['email']}.")
     session.clear()
     return redirect(url_for('index'))
+
 
 with app.app_context():
     if not os.path.exists(current_app.config['DATABASE']):
