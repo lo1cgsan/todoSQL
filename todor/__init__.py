@@ -31,11 +31,17 @@ def create_app(test_config=None):
     def hello():
         return 'Witaj!'
 
+    # import i inicjacja bazy danych
     from . import db
     db.init_app(app)
+
+    # import i rejestracja blueprinta auth
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     return app
 
 # export FLASK_APP=todor
 # export FLASK_ENV=development
 # flask run
+# flask init-db
