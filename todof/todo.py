@@ -109,7 +109,7 @@ def niezrobione():
 
 
 @app.route('/rejestruj', methods=['GET', 'POST'])
-def loguj():
+def rejestruj():
     if request.method == 'POST':
         email = request.form['email'].strip()
         haslo = request.form['haslo'].strip()
@@ -129,7 +129,7 @@ def loguj():
         else:
             flash(f'Utworzono konto {email}')
             return redirect(url_for('loguj'))
-    flash(error)
+        flash(error)
     return render_template('rejestruj.html')
 
 
@@ -149,6 +149,8 @@ def loguj():
             # tworzenie konta
             error = "Błędny email."
         elif not check_password_hash(user["haslo"], haslo):
+            print(user['haslo'])
+            print(generate_password_hash(haslo))
             error = "Błędne hasło."
 
         if error is None:
@@ -156,8 +158,33 @@ def loguj():
             session["user_id"] = user["id"]
             session["email"] = user["email"]
             return redirect(url_for('zadania'))
-    flash(error)
+        flash(error)
     return render_template('loguj.html')
+
+
+# funkcja, która uruchamia się przed każdym widokiem
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM users WHERE id = ?', (user_id,)
+        ).fetchone()
+
+
+# dekorator, który sprawdza, czy użytkownik jest zalogowany
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('loguj'))
+
+        return view(**kwargs)
+
+    return wrapped_view
 
 
 @app.route('/wyloguj')
