@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Lista zadań{% endblock %}
+{% block header %}Dodawanie zadań{% endblock %}
+
+{% block content %}
+<form class="add-form" method="POST">
+    <div class="form-group form-inline">
+    <label for="zadanie" class="p-2">Treść zadania</label>
+    <input id="zadanie" name="zadanie" required value="" class="form-control p-2">
+    <button type="submit" class="btn btn-primary m-2">Dodaj zadanie</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Logowanie{% endblock %}</h1>
-{% endblock %}
+{% block title %}Lista zadań{% endblock %}
+{% block header %}Logowanie{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="email">Email</label>
-    <input name="email" id="email" required>
-    <label for="haslo">Hasło</label>
-    <input type="password" name="haslo" id="haslo" required>
-    <input type="submit" value="Zaloguj">
-  </form>
+<form method="post">
+  <label for="email" class="p-2">Podaj email:</label>
+  <input type="email" id="email" name="email" value="" class="form-control p-2" required />
+  <label for="haslo" class="p-2">Podaj hasło:</label>
+  <input type="password" id="haslo" name="haslo" value="" class="form-control p-2" required />
+  <button type="submit" class="btn btn-primary m-2">Zaloguj</button>
+</form>
 {% endblock %}

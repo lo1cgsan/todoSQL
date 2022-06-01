@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Lista zadań{% endblock %}
+{% block header %}Edytowanie zadania{% endblock %}
+
+{% block content %}
+<form class="add-form" method="POST">
+    <div class="form-group form-inline">
+    <label for="zadanie" class="form-label">Treść zadania</label>
+    <input id="zadanie" name="zadanie" required class="form-control"
+        value="{{ request.form['zadanie'] or zadanie['zadanie'] }}">
+    <button type="submit" class="btn btn-primary m-2">Zapisz zadanie</button>
+    </div>
+</form>
+<hr>
+<form action="{{ url_for('zadania.usun', id=zadanie['id']) }}" method="post">
+    <input class="btn btn-danger" type="submit" value="Usuń" onclick="return confirm('Jesteś pewien?');">
+</form>
+{% endblock %}

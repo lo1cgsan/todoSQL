@@ -1,0 +1,19 @@
+{% if not zadanie.zrobione %}
+<form method="POST" action="{{ url_for('zrobione') }}" class="p-2">
+  <!-- wysyłamy jedynie informacje o id zadania -->
+  <input type="hidden" name="id" value="{{ zadanie.id }}">
+  <button type="submit" class="btn btn-primary">Wykonane</button>
+</form>
+{% else %}
+<!-- formularz zmiany statusu zadania -->
+<form method="POST" action="{{ url_for('niezrobione') }}" class="p-2">
+  <!-- wysyłamy jedynie informacje o id zadania -->
+  <input type="hidden" name="id" value="{{ zadanie.id }}"/>
+  <button type="submit" class="btn btn-primary">Niewykonane</button>
+</form>
+{% endif %}
+<form method="POST" action="{{ url_for('zrobione') }}" class="p-2">
+  <!-- wysyłamy jedynie informacje o id zadania -->
+  <input type="hidden" name="id" value="{{ zadanie.id }}">
+  <button type="submit" class="btn btn-primary">Usuń</button>
+</form>

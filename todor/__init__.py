@@ -39,9 +39,14 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
+    # import i rejestracja blueprinta blog
+    from . import zadania
+    app.register_blueprint(zadania.bp)
+    app.add_url_rule('/', endpoint='index')
+
     return app
 
 # export FLASK_APP=todor
 # export FLASK_ENV=development
-# flask run
 # flask init-db
+# flask run

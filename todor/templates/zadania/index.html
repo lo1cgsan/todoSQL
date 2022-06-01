@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Lista zadań{% endblock %}
+{% block header %}Zadania do wykonania{% endblock %}
+
+{% block content %}
+<h2>Lista zadań:</h2>
+<ul class="list-group">
+  {% for zadanie in zadania %}
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <article>
+      <div class="ms-2 me-auto">
+          <p class="mb-0">Autor: {{ zadanie['email'] }}. Dodane: {{ zadanie['data_pub'].strftime('%Y-%m-%d') }}</p>
+          <p class="fw-bold">{{ zadanie['zadanie'] }}</p>
+          {% if g.user['id'] == zadanie['id_user'] %}
+            {% if zadanie.zrobione %}
+              <a class="btn btn-sm fw-bold btn-primary text-decoration-line-through" href="{{ url_for('zadania.edytuj', id=zadanie['id']) }}">Edytuj</a>
+              <form class="d-inline" action="{{ url_for('zadania.zmien_status', id=zadanie['id'], status=0) }}" method="post">
+                <input class="btn btn-sm fw-bold btn-primary" type="submit" value="Niezrobione">
+              </form>
+            {% else %}
+              <a class="btn btn-sm fw-bold btn-primary" href="{{ url_for('zadania.edytuj', id=zadanie['id']) }}">Edytuj</a>
+              <form class="d-inline" action="{{ url_for('zadania.zmien_status', id=zadanie['id'], status=1) }}" method="post">
+                <input class="btn btn-sm fw-bold btn-primary" type="submit" value="Zrobione">
+              </form>
+            {% endif %}  
+          {% endif %}
+      </div>
+    </article>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

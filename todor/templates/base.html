@@ -1,24 +1,78 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - Todor</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1>Flaskr</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Wyloguj</a>
-    {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Zarejestruj się</a>
-      <li><a href="{{ url_for('auth.login') }}">Zaloguj się</a>
-    {% endif %}
-  </ul>
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+<!-- todof/templates/szkielet.html -->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  <!-- Latest compiled and minified CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<header class="p-3 bg-dark text-white">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">ToDo</a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+          <a href="{{ url_for('index') }}" class="nav-link px-2 text-white">Lista zadań</a>
+        </li>
+        {% if g.user %}
+        <li>
+          <a href="{{ url_for('zadania.dodaj') }}" class="nav-link px-2 text-white">Dodaj zadanie</a>
+        </li>
+        {% endif %}
+      </ul>
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control form-control-dark" placeholder="Szukaj..." aria-label="Szukaj">
+      </form>
+
+      <div class="text-end">
+        {% if g.user %}
+          <span>{{ g.user["email"] }}&nbsp;</span>
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light me-2">Wyloguj się</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Zaloguj się</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-warning">Utwórz konto</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container py-5">
+    <h1 class="display-5 fw-bold">{% block header %}{% endblock %}</h1>
+    <p class="col-md-8 fs-4">Twoja lista zadań.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      {% with komunikaty = get_flashed_messages(with_categories=true) %}
+      {% if komunikaty %}
+      <div id="komunikaty" class="well">
+        {% for kategoria, komunikat in komunikaty %}
+        <span class="{{ kategoria }}">{{ komunikat }}</span><br>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      <div id="tresc" class="cb">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+  </div> <!-- /row -->
+</div> <!-- /container -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+</html>
