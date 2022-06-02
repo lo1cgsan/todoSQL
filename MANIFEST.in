@@ -1,0 +1,4 @@
+include todor/baza.sql
+graft todor/static
+graft todor/templates
+global-exclude *.pyc
