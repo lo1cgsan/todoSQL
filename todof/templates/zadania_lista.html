@@ -21,34 +21,29 @@
       <!-- wypisujemy kolejno wszystkie zdania -->
       {% for zadanie in zadania %}
         <li class="list-group-item">
-          <div class="d-flex flex-row">
+          <div class="">
           <!-- wyróżnienie zadań zakończonych -->
+          <p>Autor: {{ g.user["email"] }}. Dodano: {{ zadanie.data_pub.strftime('%Y-%m-%d') }}</p>
           {% if zadanie.zrobione %}
-            <span class="done p-2">{{ zadanie.zadanie }} – <em>{{ zadanie.data_pub }}</em></span>
+            <p class="text-decoration-line-through p-2">{{ zadanie.zadanie }}</p>
           {% else %}
-            {{ zadanie.zadanie }} – <em>{{ zadanie.data_pub }}</em>
+            <p class="p-2">{{ zadanie.zadanie }}</p>
           {% endif %}
 
-          <!-- formularz zmiany statusu zadania -->
-          {% if not zadanie.zrobione %}
-            <form method="POST" action="{{ url_for('zrobione') }}" class="p-2">
-              <!-- wysyłamy jedynie informacje o id zadania -->
-              <input type="hidden" name="id" value="{{ zadanie.id }}">
-              <button type="submit" class="btn btn-primary">Wykonane</button>
-            </form>
+          <!-- zmiana statusu zadania -->
+          {% if zadanie.zrobione %}
+          <form class="d-inline" action="{{ url_for('zmien_status', id=zadanie['id'], status=0) }}" method="post">
+            <input class="btn btn-sm fw-bold btn-primary mx-1" type="submit" value="Niezrobione">
+          </form>
           {% else %}
-          <!-- formularz zmiany statusu zadania -->
-            <form method="POST" action="{{ url_for('niezrobione') }}" class="p-2">
-              <!-- wysyłamy jedynie informacje o id zadania -->
-              <input type="hidden" name="id" value="{{ zadanie.id }}"/>
-              <button type="submit" class="btn btn-primary">Niewykonane</button>
-            </form>
+          <form class="d-inline" action="{{ url_for('zmien_status', id=zadanie['id'], status=1) }}" method="post">
+            <input class="btn btn-sm fw-bold btn-primary mx-1" type="submit" value="Zrobione">
+          </form>
           {% endif %}
-            <form method="POST" action="{{ url_for('zrobione') }}" class="p-2">
-              <!-- wysyłamy jedynie informacje o id zadania -->
-              <input type="hidden" name="id" value="{{ zadanie.id }}">
-              <button type="submit" class="btn btn-primary">Usuń</button>
-            </form>
+          <a class="btn btn-sm fw-bold btn-primary" href="{{ url_for('edytuj', id=zadanie['id']) }}">Edytuj</a>
+          <form class="d-inline" action="{{ url_for('usun', id=zadanie['id']) }}" method="post">
+            <input class="btn btn-sm btn-danger mx-1" type="submit" value="Usuń" onclick="return confirm('Jesteś pewien?');">
+          </form>
           </div>
         </li>
       {% endfor %}
