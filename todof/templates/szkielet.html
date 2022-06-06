@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block tytul %}{% endblock %} &#8211; {{ config.TYTUL }}</title>
-  <!-- Latest compiled and minified CSS -->
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -47,27 +47,26 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-12">
+  <div class="row justify-content-center">
+    <div class="col-6 bg-secondary text-white rounded-2 my-2">
       {% with komunikaty = get_flashed_messages(with_categories=true) %}
       {% if komunikaty %}
-      <div id="komunikaty" class="well">
         {% for kategoria, komunikat in komunikaty %}
-        <span class="{{ kategoria }}">{{ komunikat }}</span><br>
+        <p class="p-2 {{ kategoria }}">{{ komunikat }}</p>
         {% endfor %}
-      </div>
       {% endif %}
       {% endwith %}
-      <div id="tresc" class="cb">
-        {% block tresc %}
-        {% endblock %}
-      </div>
     </div>
   </div> <!-- /row -->
+  <div class="row">
+    <div class="col-12">
+      {% block tresc %}{% endblock %}
+    </div>
+  </div>
 </div> <!-- /container -->
 
+<!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </body>
-
 </html>

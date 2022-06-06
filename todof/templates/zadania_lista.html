@@ -8,26 +8,30 @@
     {% if session["email"] %}
     <p><strong class="success">Witaj: {{ session["email"] }}</strong></p>
     <!-- formularz dodawania zadania -->
-    <form class="add-form" method="POST" action="{{ url_for('zadania') }}">
-      <div class="form-group form-inline">
+    <form method="post">
+      <div class="row">
         <label for="zadanie" class="p-2">Treść zadania</label>
-        <input id="zadanie" name="zadanie" required value="" class="form-control p-2">
-        <button type="submit" class="btn btn-primary m-2">Dodaj zadanie</button>
+      <div class="col-lg-8">
+        <input id="zadanie" name="zadanie" required value="" class="form-control p-2 col-auto">
+      </div>
+      <div class="col-lg-4">
+        <button type="submit" class="btn btn-primary p-2 mt-2 mt-lg-0 col-auto">Dodaj zadanie</button>
+      </div>
       </div>
     </form>
     {% endif %}
 
-    <ol class="list-group">
+    <ol class="list-group mt-5">
       <!-- wypisujemy kolejno wszystkie zdania -->
       {% for zadanie in zadania %}
         <li class="list-group-item">
           <div class="">
           <!-- wyróżnienie zadań zakończonych -->
-          <p>Autor: {{ g.user["email"] }}. Dodano: {{ zadanie.data_pub.strftime('%Y-%m-%d') }}</p>
+          <p><b>Autor</b>: {{ g.user["email"] }}. <b>Dodano</b>: {{ zadanie.data_pub.strftime('%Y-%m-%d %H:%M') }}</p>
           {% if zadanie.zrobione %}
             <p class="text-decoration-line-through p-2">{{ zadanie.zadanie }}</p>
           {% else %}
-            <p class="p-2">{{ zadanie.zadanie }}</p>
+            <p class="fw-bold fs-5 p-2">{{ zadanie.zadanie }}</p>
           {% endif %}
 
           <!-- zmiana statusu zadania -->

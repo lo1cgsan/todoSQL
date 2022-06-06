@@ -1,12 +1,14 @@
 {% extends 'szkielet.html' %}
-{% block title %}Lista zadań{% endblock %}
-{% block header %}Edytowanie zadania{% endblock %}
+{% block tytul %}Lista zadań{% endblock %}
+{% block h1 %}Edytowanie zadania{% endblock %}
 
-{% block content %}
+{% block tresc %}
 <form method="post">
+  <div class="col-lg-8">
     <label for="zadanie" class="form-label">Treść zadania</label>
     <input id="zadanie" name="zadanie" required class="form-control"
         value="{{ request.form['zadanie'] or zadanie['zadanie'] }}">
     <button type="submit" class="btn btn-primary m-2">Zapisz zadanie</button>
+  </div>
 </form>
 {% endblock %}

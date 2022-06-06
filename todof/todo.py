@@ -8,6 +8,7 @@ from datetime import datetime
 from flask import flash, redirect, url_for, request
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.exceptions import abort
 
 
 app = Flask(__name__)
@@ -57,19 +58,21 @@ def zadania():
     if request.method == 'POST':
         zadanie = request.form['zadanie'].strip()
         if len(zadanie) > 0:
-            zrobione = '0'
             data_pub = datetime.now()
             db = get_db()
-            db.execute('INSERT INTO zadania VALUES (?, ?, ?, ?, ?);',
-                       [None, session["user_id"], zadanie, zrobione, data_pub])
+            db.execute('INSERT INTO zadania (id_user, zadanie) VALUES (?, ?)',
+                       (session["user_id"], zadanie))
             db.commit()
             flash('Dodano nowe zadanie.')
             return redirect(url_for('zadania'))
 
         error = 'Nie możesz dodać pustego zadania!'  # komunikat o błędzie
     if "user_id" in session:
-        db = get_db()
-        zadania = db.execute('SELECT * FROM zadania ORDER BY data_pub DESC').fetchall()
+        zadania = get_db().execute(
+            'SELECT z.id, zadanie, zrobione, data_pub, id_user, email'
+            ' FROM zadania z JOIN users u ON z.id_user = u.id'
+            ' ORDER BY data_pub DESC'
+        ).fetchall()
         return render_template('zadania_lista.html', zadania=zadania, error=error)
     else:
         flash('Dodawanie zadań wymaga logowania.')
@@ -201,7 +204,7 @@ def edytuj(id):
                 (zadanie, id)
             )
             db.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('zadania'))
 
     return render_template('edytuj.html', zadanie=zadanie)
 
@@ -213,7 +216,7 @@ def usun(id):
     db = get_db()
     db.execute('DELETE FROM zadania WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('zadania'))
 
 
 @app.route('/<int:id>/<int:status>/zmien_status', methods=('POST',))

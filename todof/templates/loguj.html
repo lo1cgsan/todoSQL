@@ -5,6 +5,8 @@
 {% block h1 %}Logowanie{% endblock %}
 
 {% block tresc %}
+<div class="row justify-content-center">
+  <div class="col-6">
     <!-- formularz dodawania zadania -->
     <form class="add-form" method="POST" action="{{ url_for('loguj') }}">
       <label for="email" class="p-2">Podaj email:</label>
@@ -13,4 +15,6 @@
       <input type="password" id="haslo" name="haslo" value="" class="form-control p-2" required />
       <button type="submit" class="btn btn-primary m-2">Zaloguj</button>
     </form>
+  </div>
+</div>
 {% endblock %}
