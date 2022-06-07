@@ -20,7 +20,7 @@ def register():
         if not email:
             error = 'Email jest wymagany.'
         elif not haslo:
-            error = 'Haśło jest wymagane.'
+            error = 'Hasło jest wymagane.'
 
         if error is None:
             try:

@@ -36,3 +36,22 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+
+
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, email='adres1@wp.pl', haslo='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'email': email, 'haslo': haslo}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
