@@ -16,7 +16,7 @@
 <header class="p-3 bg-dark text-white">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">ToDo</a>
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">Strona główna</a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
@@ -29,6 +29,7 @@
 
       <div class="text-end">
         {% if g.user %}
+          <span>{{ g.user['email'] }}&nbsp;</span>
           <a href="{{ url_for('wyloguj') }}" class="btn btn-outline-light me-2">Wyloguj się</a>
         {% else %}
           <a href="{{ url_for('loguj') }}" class="btn btn-outline-light me-2">Zaloguj się</a>

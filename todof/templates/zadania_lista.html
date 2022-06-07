@@ -5,8 +5,8 @@
 {% block h1 %}Moje zadania{% endblock %}
 
 {% block tresc %}
-    {% if session["email"] %}
-    <p><strong class="success">Witaj: {{ session["email"] }}</strong></p>
+    {% if g.user %}
+    <p><strong class="success">Witaj: {{ g.user["email"] }}</strong></p>
     <!-- formularz dodawania zadania -->
     <form method="post">
       <div class="row">

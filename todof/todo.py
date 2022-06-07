@@ -48,7 +48,6 @@ def init_db():
 
 @app.route('/')
 def index():
-    print(session)
     return render_template('index.html')
 
 
@@ -127,7 +126,6 @@ def loguj():
         if error is None:
             session.clear()
             session["user_id"] = user["id"]
-            session["email"] = user["email"]
             return redirect(url_for('zadania'))
         flash(error)
     return render_template('loguj.html')
@@ -148,7 +146,7 @@ def load_logged_in_user():
 
 @app.route('/wyloguj')
 def wyloguj():
-    flash(f"Wylogowano użytkownika {session['email']}.")
+    flash(f"Wylogowano użytkownika {g.user['email']}.")
     session.clear()
     return redirect(url_for('index'))
 
@@ -186,16 +184,11 @@ def get_zadanie(id, check_author=True):
 @login_required
 def edytuj(id):
     zadanie = get_zadanie(id)
-    print(zadanie['zadanie'])
     if request.method == 'POST':
         zadanie = request.form['zadanie']
-        error = None
 
         if not zadanie:
-            error = 'Treść zadania nie może być pusta.'
-
-        if error is not None:
-            flash(error)
+            flash('Treść zadania nie może być pusta.')
         else:
             db = get_db()
             db.execute(
