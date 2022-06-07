@@ -10,3 +10,5 @@ setup(
         'flask',
     ],
 )
+
+# pip install -e . – instalacja projektu w trybie edytowalnym / deweloperskim
