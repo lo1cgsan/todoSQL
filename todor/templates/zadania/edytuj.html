@@ -11,8 +11,4 @@
     <button type="submit" class="btn btn-primary m-2">Zapisz zadanie</button>
     </div>
 </form>
-<hr>
-<form action="{{ url_for('zadania.usun', id=zadanie['id']) }}" method="post">
-    <input class="btn btn-danger" type="submit" value="Usuń" onclick="return confirm('Jesteś pewien?');">
-</form>
 {% endblock %}

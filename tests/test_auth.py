@@ -17,16 +17,16 @@ def test_register(client, app):
 
 
 @pytest.mark.parametrize(('email', 'haslo', 'message'), (
-    ('', '', b'Email jest wymagany.'),
-    ('a', '', b'Hasło jest wymagane.'),
-    ('adres1@wp.pl', 'test', b'już zarejestrowany'),
+    ('', '', 'Email jest wymagany.'),
+    ('a', '', 'Hasło jest wymagane.'),
+    ('adres1@wp.pl', 'test', 'już zarejestrowany'),
 ))
 def test_register_validate_input(client, email, haslo, message):
     response = client.post(
         '/auth/register',
         data={'email': email, 'haslo': haslo}
     )
-    assert message in response.data
+    assert message in response.get_data(as_text=True)
 
 
 def test_login(client, auth):
@@ -41,12 +41,12 @@ def test_login(client, auth):
 
 
 @pytest.mark.parametrize(('email', 'haslo', 'message'), (
-    ('a', 'test', b'Błędny email.'),
-    ('test', 'a', b'Błędne hasło.'),
+    ('a', 'test', 'Błędny email.'),
+    ('adres1@wp.pl', 'a', 'Błędne hasło.'),
 ))
 def test_login_validate_input(auth, email, haslo, message):
     response = auth.login(email, haslo)
-    assert message in response.data
+    assert message in response.get_data(as_text=True)
 
 
 def test_logout(client, auth):

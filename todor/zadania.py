@@ -29,7 +29,7 @@ def dodaj():
         error = None
 
         if not zadanie:
-            error = 'Treść zadania nie może być pusta.'
+            error = 'Zadanie nie może być puste.'
 
         if error is not None:
             flash(error)
@@ -73,7 +73,7 @@ def edytuj(id):
         error = None
 
         if not zadanie:
-            error = 'Treść zadania nie może być pusta.'
+            error = 'Zadanie nie może być puste.'
 
         if error is not None:
             flash(error)

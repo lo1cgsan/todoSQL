@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS users;  -- usunięcie tabeli
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UINQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     haslo TEXT NOT NULL
 );
 

@@ -23,6 +23,9 @@
                 <input class="btn btn-sm fw-bold btn-primary" type="submit" value="Zrobione">
               </form>
             {% endif %}
+            <form class="d-inline" action="{{ url_for('zadania.usun', id=zadanie['id']) }}" method="post">
+              <input class="btn btn-sm btn-danger" type="submit" value="Usuń" onclick="return confirm('Jesteś pewien?');">
+            </form>
           {% endif %}
       </div>
     </article>
